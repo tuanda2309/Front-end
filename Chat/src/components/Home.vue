@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted, h } from 'vue'
 import { LoadingOutlined } from '@ant-design/icons-vue';
-import '/public/bg.svg';
 
 const topics = ref([]);
 const isLoading = ref(true);
@@ -23,15 +22,13 @@ const indicator = h(LoadingOutlined,
 </script>
 
 <template>
-    <!-- <div class="spinner" v-if="isLoading">
-        <a-spin :indicator="indicator" />
-    </div> -->
     <div class="background">
-        <img src="bg.svg" alt="" style="width: 30%; margin-bottom: 6%;">
+        <img src="/bg.svg" alt="" style="width: 30%; margin-bottom: 6%;">
     </div>
 </template>
 
 <style scoped>
+
 .quiz-container
 {
     display: flex;
