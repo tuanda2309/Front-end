@@ -8,17 +8,13 @@ import { FileOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 
 const userStore = useUserStore();
-
 const { user } = storeToRefs(userStore);
 
-// --- THAY ĐỔI: Khai báo Domain Render ---
 const domain = 'back-end-teui.onrender.com';
-const API_URL = `https://${domain}`; // Link HTTP dùng cho API
+const API_URL = `https://${domain}`;
 
-// --- THAY ĐỔI QUAN TRỌNG: Dùng wss:// cho WebSocket ---
 const socket = new WebSocket(`wss://${domain}/ws/${user.value.username}`);
 const file_socket = new WebSocket(`wss://${domain}/ws/file/${user.value.username}`);
-
 
 const currentMessage = ref('');
 const messages = ref([]);
@@ -30,7 +26,6 @@ const listUsers = ref([]);
 
 onMounted(async () =>
 {
-    // --- THAY ĐỔI: Dùng API_URL ---
     await axios.get(`${API_URL}/message/get_all`).then((res) =>
     {
         res.data.forEach((msg) =>
@@ -64,7 +59,6 @@ onMounted(async () =>
         });
     };
 
-    // --- THAY ĐỔI: Dùng API_URL ---
     await axios.get(`${API_URL}/api/user/get_all`).then((res) =>
     {
         listUsers.value = res.data;
@@ -72,7 +66,6 @@ onMounted(async () =>
 
     setInterval(async () =>
     {
-        // --- THAY ĐỔI: Dùng API_URL ---
         await axios.get(`${API_URL}/api/user/get_all`).then((res) =>
         {
             listUsers.value = res.data;
@@ -82,6 +75,8 @@ onMounted(async () =>
 
 const sendMessage = () =>
 {
+    if (!currentMessage.value || currentMessage.value.trim() === '') return;
+
     const messageData = {
         type: 'text',
         content: currentMessage.value
@@ -295,7 +290,7 @@ window.addEventListener("offline", handleOffline);
 
                             <a-input style="border-radius: 15px;" placeholder="Nhập tin nhắn"
                                 v-model:value="currentMessage" />
-                            <a-button type="submit" style="margin-left: 5px; border-radius: 30px; border-color: white;">
+                            <a-button type="submit" @click="sendMessage" style="margin-left: 5px; border-radius: 30px; border-color: white;">
                                 <SendOutlined style="font-size: 24px;" />
                             </a-button>
                         </div>
@@ -307,7 +302,6 @@ window.addEventListener("offline", handleOffline);
 </template>
 
 <style scoped>
-/* Giữ nguyên phần CSS */
 .chat-container
 {
     position: fixed;
